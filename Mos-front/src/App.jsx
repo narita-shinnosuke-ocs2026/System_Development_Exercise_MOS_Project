@@ -26,11 +26,10 @@ function App() {
 
   return (
     <div className="app-main">
-      <header className="site-header">
-        <h1>居酒屋みどり亭</h1>
-      </header>
-
       <main className="home-section">
+        <div className="page-title">
+          <h1>居酒屋みどり亭</h1>
+        </div>
         {page === 'home' ? (
           <>
             <div className="welcome-text">
@@ -41,10 +40,10 @@ function App() {
               <button className="nav-button customer-button" onClick={() => setPage('customer')}>
                 お客様用画面へ移行
               </button>
-              <button className="nav-button staff-button" onClick={() => setPage('staff')}>
-                スタッフ用画面
-              </button>
             </div>
+            <button className="nav-button staff-button" onClick={() => setPage('staff')}>
+              スタッフ用画面
+            </button>
           </>
         ) : page === 'customer' ? (
           <CustomerPage onBack={() => setPage('home')} />
