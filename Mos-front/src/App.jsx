@@ -1,47 +1,58 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
-// 顧客用画面コンポーネント
-function CustomerPage() {
-  return <div>お客様用画面</div>;
+function CustomerPage({ onBack }) {
+  return (
+    <div className="page-content">
+      <h2>お客様用画面</h2>
+      <p>こちらからメニューやご注文の確認・操作ができます。</p>
+      <button className="nav-button back-button" onClick={onBack}>トップへ戻る</button>
+    </div>
+  );
 }
 
-// スタッフ用画面コンポーネント
-function StaffPage() {
-  return <div>スタッフ用画面</div>;
+function StaffPage({ onBack }) {
+  return (
+    <div className="page-content">
+      <h2>スタッフ用画面</h2>
+      <p>スタッフ専用の管理機能へアクセスします。</p>
+      <button className="nav-button back-button" onClick={onBack}>トップへ戻る</button>
+    </div>
+  );
 }
+
 function App() {
+  const [page, setPage] = useState('home');
 
   return (
-    <>
-    <header>
+    <div className="app-main">
+      <header className="site-header">
         <h1>居酒屋みどり亭</h1>
       </header>
-      <section id="center">
-        <div>
-          <h1>いらっしゃいませ</h1>
-          <h2>ボタンをお選びください
-          </h2>
-        </div>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-          <button
-            className="costmer link"
-            style={{ fontSize: '18px', padding: '10px 20px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px' }}
-            onClick={() => setPage('customer')}>
-            お客様用画面へ移行
-          </button>
-          <button
-            className="stuff link"
-            style={{position: 'absolute',bottom: '20px',right: '20px', fontSize: '18px', padding: '5px 10px', backgroundColor: '#fd5454', color: 'white', border: 'none', borderRadius: '5px' }}
-            onClick={() => setPage('staff')}          >
-            スタッフ用画面
-          </button>
-        </div>
-      </section>
-    </>
+
+      <main className="home-section">
+        {page === 'home' ? (
+          <>
+            <div className="welcome-text">
+              <h1>いらっしゃいませ</h1>
+              <h2>ボタンをお選びください</h2>
+            </div>
+            <div className="button-row">
+              <button className="nav-button customer-button" onClick={() => setPage('customer')}>
+                お客様用画面へ移行
+              </button>
+              <button className="nav-button staff-button" onClick={() => setPage('staff')}>
+                スタッフ用画面
+              </button>
+            </div>
+          </>
+        ) : page === 'customer' ? (
+          <CustomerPage onBack={() => setPage('home')} />
+        ) : (
+          <StaffPage onBack={() => setPage('home')} />
+        )}
+      </main>
+    </div>
   )
 }
 
