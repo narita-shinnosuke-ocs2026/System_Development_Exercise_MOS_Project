@@ -1,72 +1,70 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 
-function CustomerPage({ onBack }) {
+function Home() {
+  return (
+    <>
+      <div className="page-title">
+        <h1>居酒屋みどり亭</h1>
+      </div>
+
+      <div className="welcome-text">
+        <h1>いらっしゃいませ</h1>
+        <h2>ボタンをお選びください</h2>
+      </div>
+
+      <div className="button-row">
+        <Link to="/customer" className="nav-button customer-button">
+          お客様用画面へ移行
+        </Link>
+      </div>
+
+      <Link to="/staff" className="nav-button staff-button">
+        スタッフ用画面
+      </Link>
+    </>
+  )
+}
+
+function CustomerPage() {
   return (
     <div className="page-content">
       <h2>お客様用画面</h2>
       <p>こちらからメニューやご注文の確認・操作ができます。</p>
 
-      <button className="nav-button back-button" onClick={onBack}>
+      <Link to="/" className="nav-button back-button">
         トップへ戻る
-      </button>
+      </Link>
     </div>
   )
 }
 
-function StaffPage({ onBack }) {
+function StaffPage() {
   return (
     <div className="page-content">
       <h2>スタッフ用画面</h2>
       <p>スタッフ専用の管理機能へアクセスします。</p>
 
-      <button className="nav-button back-button" onClick={onBack}>
+      <Link to="/" className="nav-button back-button">
         トップへ戻る
-      </button>
+      </Link>
     </div>
   )
 }
 
 function App() {
-  const [page, setPage] = useState('home')
-
   return (
-    <div className="app-main">
-      <main className="home-section">
-        <div className="page-title">
-          <h1>居酒屋みどり亭</h1>
-        </div>
-
-        {page === 'home' ? (
-          <>
-            <div className="welcome-text">
-              <h1>いらっしゃいませ</h1>
-              <h2>ボタンをお選びください</h2>
-            </div>
-
-            <div className="button-row">
-              <button
-                className="nav-button customer-button"
-                onClick={() => setPage('customer')}
-              >
-                お客様用画面へ移行
-              </button>
-            </div>
-
-            <button
-              className="nav-button staff-button"
-              onClick={() => setPage('staff')}
-            >
-              スタッフ用画面
-            </button>
-          </>
-        ) : page === 'customer' ? (
-          <CustomerPage onBack={() => setPage('home')} />
-        ) : (
-          <StaffPage onBack={() => setPage('home')} />
-        )}
-      </main>
-    </div>
+    <BrowserRouter>
+      <div className="app-main">
+        <main className="home-section">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/customer" element={<CustomerPage />} />
+            <Route path="/staff" element={<StaffPage />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   )
 }
 
