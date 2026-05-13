@@ -1,0 +1,13 @@
+package com.midori.mos_backend;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MosBackendApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(MosBackendApplication.class, args);
+	}
+
+}
