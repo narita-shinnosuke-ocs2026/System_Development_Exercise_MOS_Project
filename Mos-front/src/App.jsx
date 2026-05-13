@@ -1,41 +1,3 @@
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom'
-import './App.css'
-
-function App() {
-  
-const navigate = useNavigate()
-
-  const handleLogin = (e) => {
-    e.preventDefault()
-    navigate('/employee',{
-      state: {name: '山田太郎',id: '12345',}
-    })
-  }
-
-  return (
-    <>
-      <div className="black-banner">
-
-        <h1>居酒屋みどり亭</h1>
-
-      </div>
-
-      <form className="lightgray-banner" onSubmit={handleLogin}>
-        <div className="input-group">
-          <input type="text" placeholder="ID" />
-        </div>
-
-        <div className="input-group">
-          <input type="password" placeholder="Password" />
-        </div>
-
-        <div className="form-actions">
-          <button type="submit" className="login-button">ログイン</button>
-        </div>
-        
-      </form>
-=======
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 
@@ -60,7 +22,6 @@ function Home() {
       <Link to="/staff" className="nav-button staff-button">
         スタッフ用画面
       </Link>
->>>>>>> 2958e8c2717a397a16bc49bac5595f11b38e7314
     </>
   )
 }
