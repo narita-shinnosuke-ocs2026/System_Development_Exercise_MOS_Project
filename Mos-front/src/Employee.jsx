@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom'
+
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 import './Employee.css'
 
 function Employee() {
   const navigate = useNavigate()
-  const { state: user } = useLocation() // ← ① user受取
+  const { state: user } = useLocation()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -13,22 +14,23 @@ function Employee() {
     if (!user) navigate('/')
   }, [user, navigate])
 
-
   // クリック外で閉じる
   useEffect(() => {
-    const close = (e) => ref.current && !ref.current.contains(e.target) && setOpen(false)
+    const close = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+    }
     document.addEventListener('mousedown', close)
     return () => document.removeEventListener('mousedown', close)
   }, [])
 
-  if (!user) return null // ガード中は何も描画しない
+  if (!user) return null
 
   return (
     <>
       <header className="header">
         <div className="user-area" ref={ref}>
           <button className="user-icon" onClick={() => setOpen(!open)}>
-            {user.name[0]}
+            {user.name?.[0] ?? '？'}
           </button>
 
           {open && (
@@ -41,10 +43,9 @@ function Employee() {
         </div>
       </header>
 
-      <main>
+      <main className="center">
         <h2>ホーム</h2>
 
-        {/* ③ 権限で表示切替 */}
         {user.role === 'manager' ? (
           <p>📊 店長メニュー（売上・管理）</p>
         ) : (
