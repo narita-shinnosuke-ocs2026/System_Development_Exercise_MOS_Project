@@ -1,0 +1,78 @@
+
+.seatList {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.seatCard {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+}
+
+.seatCard:hover {
+  box-shadow: 0 12px 22px rgba(0,0,0,0.10);
+}
+
+.seatStatus {
+  width: 10px;
+  height: 100%;
+  border-radius: 6px;
+}
+
+/* 状態色 */
+.seatStatus.green { background: #7CFC00; }
+.seatStatus.red { background: #ff3b30; }
+.seatStatus.yellow { background: #ffd60a; }
+.seatStatus.black { background: #222; }
+
+.seatMain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seatId {
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.seatTime {
+  font-size: 13px;
+  opacity: .75;
+}
+
+.seatLabel {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pager {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pageDot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.pageDot.active {
+  background: #bbb;
+}

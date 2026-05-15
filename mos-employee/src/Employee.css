@@ -1,139 +1,207 @@
 
-.staffHeader{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding: 12px 16px;
-  background: #fff;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+.topHeader {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  align-items: center;
+  padding: 10px 12px;
+  background: #f2f2f2;
+  border-bottom: 1px solid rgba(0,0,0,0.10);
 }
 
-.staffBrand{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
+.leftControls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
-.staffTitle{
+/* 共通のアイコンボタン */
+.iconBtn {
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 18px;
+}
+
+.iconBtn:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+/* ハンバーガー：サイズを元に戻す（大きめ） */
+.iconBtn.hamburger {
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* ===== 中央タイトル ===== */
+.titleBlock {
+  text-align: center;
+  line-height: 1.1;
+}
+
+.shopName {
+  font-size: clamp(20px, 4vw, 30px);
   font-weight: 900;
-  letter-spacing: .02em;
+  letter-spacing: 0.08em;
+  font-family: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
 }
 
-.staffSub{
-  font-size: 12px;
-  opacity: .65;
+.screenName {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.75;
 }
 
-.staffMain{
-  padding: 16px;
+/* ✅ 右上ユーザー（山アイコン＋ポップ） */
+.userArea {
+  justify-self: end;
+  position: relative;
 }
 
-.userArea{ position: relative; }
-
-.userIcon{
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
+.userIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   background: #2f80ed;
   color: #fff;
   font-weight: 900;
   border: none;
   cursor: pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  transition: opacity .2s, transform .05s;
 }
 
-.userIcon:hover{ opacity: .90; }
-.userIcon:active{ transform: translateY(1px); }
+.userIcon:hover {
+  opacity: 0.9;
+}
 
-.userPop{
-  position:absolute;
-  right:0;
-  top: 48px;
+.userPop {
+  position: absolute;
+  right: 0;
+  top: 46px;
   width: 220px;
-  background:#fff;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 14px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 12px;
   padding: 12px;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.14);
 }
 
-.userLine{ margin: 0 0 6px; }
-.subtle{ font-size: 13px; opacity: .8; }
+.userLine {
+  margin: 0 0 6px;
+}
 
-.logoutBtn{
-  width:100%;
+.subtle {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.logoutBtn {
+  width: 100%;
   margin-top: 8px;
   padding: 10px 12px;
   border-radius: 12px;
   border: none;
   background: #111;
-  color:#fff;
+  color: #fff;
   font-weight: 800;
   cursor: pointer;
 }
 
-.popHint{
+.logoutBtn:hover {
+  opacity: 0.92;
+}
+
+.popHint {
   margin-top: 8px;
   font-size: 11px;
-  opacity: .6;
+  opacity: 0.6;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  margin-top: 12px;
+/* ===== オーバーレイ ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.30);
+  z-index: 15;
 }
 
-.tile{
-  text-align:left;
-  border: 1px solid rgba(0,0,0,0.08);
-  background: #fff;
-  border-radius: 16px;
+/* ===== スライドメニュー ===== */
+.sideMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  width: 260px;
+  height: 100%;
   padding: 14px;
-  cursor: pointer;
-  box-shadow: 0 10px 18px rgba(0,0,0,0.06);
-  transition: transform .06s, box-shadow .2s;
+  background: #fff;
+  border-right: 1px solid rgba(0,0,0,0.10);
+  box-shadow: 2px 0 16px rgba(0,0,0,0.18);
+  transform: translateX(-100%);
+  transition: transform 0.28s ease;
 }
 
-.tile:hover{
-  box-shadow: 0 14px 24px rgba(0,0,0,0.10);
+.sideMenu.active {
+  transform: translateX(0);
 }
 
-.tile:active{
-  transform: translateY(1px);
+.menuHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  margin-bottom: 10px;
 }
 
-.tileTitle{
+.menuTitle {
   font-weight: 900;
+  letter-spacing: 0.06em;
 }
 
-.tileSub{
-  margin-top: 4px;
-  font-size: 12px;
-  opacity: .7;
+.closeBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(0,0,0,0.06);
+  cursor: pointer;
+  font-size: 20px;
 }
 
-.roleCard{
-  margin-top: 14px;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
+.closeBtn:hover {
+  background: rgba(0,0,0,0.10);
+}
+
+.menuItem {
+  width: 100%;
+  text-align: left;
+  padding: 12px 12px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 12px;
+  background: #f6f6f6;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background: #eaeaea;
+}
+
+/* ===== コンテンツ ===== */
+.content {
+  padding: 16px;
+}
+
+.homeHint {
   padding: 14px;
-}
-
-.roleTitle{ font-weight: 900; }
-.roleSub{ margin-top: 4px; font-size: 12px; opacity: .7; }
-
-@media (min-width: 720px){
-  .grid{
-    grid-template-columns: repeat(3, 1fr);
-  }
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
 }
