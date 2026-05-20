@@ -42,16 +42,22 @@ function Employee() {
   }, [])
 
   // ESCで閉じる（メニュー＆ユーザーポップ）
+  
   useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') {
+    const handleClick = (e) => {
+      // メニュー外クリック
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
         setMenuOpen(false)
-        setUserOpen(false)
       }
     }
-    document.addEventListener('keydown', handleEsc)
-    return () => document.removeEventListener('keydown', handleEsc)
+
+    document.addEventListener('mousedown', handleClick)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+    }
   }, [])
+
 
   const screenTitle = TITLE_MAP[view] ?? 'ホーム'
 
@@ -115,8 +121,13 @@ function Employee() {
       </header>
 
       {/* ===== オーバーレイ（クリックで閉じる） ===== */}
-      {menuOpen && <div className="overlay" onClick={() => setMenuOpen(false)} />}
-
+      {menuOpen && (
+        <div
+          className="overlay"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+      
       {/* ===== スライドメニュー ===== */}
       <aside className={`sideMenu ${menuOpen ? 'active' : ''}`} ref={menuRef}>
         <div className="menuHeader">
