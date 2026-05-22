@@ -4,6 +4,7 @@ import { CartProvider } from './CartContext'
 import Home from './pages/Home'
 import CustomerPage from './pages/Customer'
 import MenuPage from './pages/MenuPage'
+import CategoryMenu from './pages/CategoryMenu'
 import HistoryPage from './pages/HistoryPage'
 import OrderConfirmPage from './pages/OrderConfirmPage'
 import OrderSendPage from './pages/OrderSendPage'
@@ -24,8 +25,10 @@ function App() {
               <Route path="/about" element={<Navigate to="/customer" replace />} />
               <Route path="/customer" element={<CustomerPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/menu" element={<MenuPage />} />
+              <Route path="/menu" element={<Navigate to="/menu/categories" replace />} />
+              <Route path="/menu/categories" element={<CategoryMenu />} />
               <Route path="/menu/item/:id" element={<ProductDetail />} />
+              <Route path="/menu/:category" element={<MenuPage />} />
               <Route path="/history" element={<HistoryPage />} />
               <Route path="/order-confirm" element={<OrderConfirmPage />} />
               <Route path="/order-send" element={<OrderSendPage />} />

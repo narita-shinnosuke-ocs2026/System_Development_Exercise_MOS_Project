@@ -4,8 +4,7 @@ import { CartContext } from '../CartContext'
 import '../menu.css'
 
 export function MenuLayout({ activeTab, children }) {
-  const { cartCount, orderHistory } = useContext(CartContext)
-  const hasOrderHistory = orderHistory.length > 0
+  const { cartCount } = useContext(CartContext)
 
   return (
     <div className="menu-screen">
@@ -19,28 +18,17 @@ export function MenuLayout({ activeTab, children }) {
           </div>
 
           <div className="menu-header-buttons">
-            {hasOrderHistory ? (
-              <Link
-                to="/history"
-                className={`circle-button ${activeTab === 'history' ? 'is-active' : ''}`}
-              >
-                注文
-                <br />
-                履歴
-              </Link>
-            ) : (
-              <span
-                className={`circle-button is-disabled ${activeTab === 'history' ? 'is-active' : ''}`}
-                aria-disabled="true"
-              >
-                注文
-                <br />
-                履歴
-              </span>
-            )}
+            <Link
+              to="/history"
+              className={`circle-button ${activeTab === 'history' ? 'is-active' : ''}`}
+            >
+              注文
+              <br />
+              履歴
+            </Link>
 
             <Link
-              to="/menu"
+              to="/menu/free"
               className={`circle-button ${activeTab === 'free' ? 'is-active' : ''}`}
             >
               無料
@@ -64,7 +52,7 @@ export function MenuLayout({ activeTab, children }) {
       <main className="menu-content">{children}</main>
 
       <footer className="menu-footer">
-        <Link to="/customer" className="footer-button">
+        <Link to="/menu/categories" className="footer-button">
           ホームへ
         </Link>
 

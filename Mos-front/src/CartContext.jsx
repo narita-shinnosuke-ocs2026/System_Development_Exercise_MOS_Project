@@ -1,10 +1,21 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 export const CartContext = createContext()
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([])
-  const [orderHistory, setOrderHistory] = useState([])
+  const [orderHistory, setOrderHistory] = useState(() => {
+    try {
+      const saved = localStorage.getItem('orderHistory')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+
+  useEffect(() => {
+    localStorage.setItem('orderHistory', JSON.stringify(orderHistory))
+  }, [orderHistory])
 
   const addToCart = (item) => {
     setCartItems(prev => [...prev, { ...item, cartId: Date.now() }])

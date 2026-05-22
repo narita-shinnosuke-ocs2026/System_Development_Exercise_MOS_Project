@@ -1,9 +1,12 @@
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { CartContext } from '../CartContext'
 import '../Customer.css'
 
-const hasOrderHistory = false
-
 export default function CustomerPage() {
+  const { orderHistory } = useContext(CartContext)
+  const hasOrderHistory = orderHistory.length > 0
+
   return (
     <div className="customer-container">
       <div className="customer-card">
@@ -14,7 +17,7 @@ export default function CustomerPage() {
         </p>
 
         <div className="customer-button-area">
-          <Link to="/menu" className="customer-button menu-button">
+          <Link to="/menu/categories" className="customer-button menu-button">
             メニュー表
           </Link>
 
