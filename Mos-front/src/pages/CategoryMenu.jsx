@@ -31,7 +31,7 @@ export default function CategoryMenu() {
         {categories.map((category) => (
           <Link
             key={category.id}
-            to={`/menu/${category.id}`}
+            to={`/menu/c/${category.id}`}
             className="category-card"
           >
             <div className="category-image-area">

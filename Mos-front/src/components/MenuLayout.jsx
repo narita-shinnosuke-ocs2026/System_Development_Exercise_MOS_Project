@@ -6,6 +6,7 @@ import '../menu.css'
 export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick }) {
   const { cartCount } = useContext(CartContext)
 
+      // 滞在時間については本来はサーバーからの情報を元に計算するべきですが、DB実装までは固定値で表示しています
   return (
     <div className="menu-screen">
       <header className="menu-header">
@@ -28,7 +29,7 @@ export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick 
             </Link>
 
             <Link
-              to="/menu/free"
+              to="/menu/c/free"
               className={`circle-button ${activeTab === 'free' ? 'is-active' : ''}`}
             >
               無料
@@ -62,7 +63,7 @@ export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick 
           </button>
         ) : (
           <Link
-            to="/menu/categories"
+            to="/menu"
             className={`footer-button ${activeTab === 'categories' ? 'is-current' : ''}`}
           >
             ホームへ

@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
+import { orderHistoryRepository } from './services/orderHistoryRepository'
 
 let cartIdCounter = 0
 
@@ -15,27 +16,36 @@ export const CartContext = createContext()
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([])
-  const [orderHistory, setOrderHistory] = useState(() => {
-    try {
-      const saved = localStorage.getItem('orderHistory')
-      return saved ? JSON.parse(saved) : []
-    } catch {
-      return []
-    }
-  })
+  const [orderHistory, setOrderHistory] = useState([])
+  const [hasLoadedHistory, setHasLoadedHistory] = useState(false)
 
   useEffect(() => {
-    const didInit = sessionStorage.getItem('didInitOrderHistory')
-    if (!didInit) {
-      setOrderHistory([])
-      localStorage.removeItem('orderHistory')
-      sessionStorage.setItem('didInitOrderHistory', 'true')
+    let isActive = true
+
+    orderHistoryRepository
+      .load()
+      .then((history) => {
+        if (isActive) {
+          setOrderHistory(history)
+          setHasLoadedHistory(true)
+        }
+      })
+      .catch(() => {
+        if (isActive) {
+          setOrderHistory([])
+          setHasLoadedHistory(true)
+        }
+      })
+
+    return () => {
+      isActive = false
     }
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('orderHistory', JSON.stringify(orderHistory))
-  }, [orderHistory])
+    if (!hasLoadedHistory) return
+    orderHistoryRepository.save(orderHistory)
+  }, [orderHistory, hasLoadedHistory])
 
   const addToCart = (item) => {
     setCartItems(prev => [...prev, { ...item, cartId: generateCartId() }])

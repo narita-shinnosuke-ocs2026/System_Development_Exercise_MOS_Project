@@ -21,12 +21,12 @@ function App() {
           <main className="home-section">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/about" element={<Navigate to="/menu/categories" replace />} />
+              <Route path="/about" element={<Navigate to="/menu" replace />} />
               <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/menu" element={<Navigate to="/menu/categories" replace />} />
-              <Route path="/menu/categories" element={<CategoryMenu />} />
+              <Route path="/menu" element={<CategoryMenu />} />
+              <Route path="/menu/categories" element={<Navigate to="/menu" replace />} />
               <Route path="/menu/item/:id" element={<ProductDetail />} />
-              <Route path="/menu/:category" element={<MenuPage />} />
+              <Route path="/menu/c/:category" element={<MenuPage />} />
               <Route path="/history" element={<HistoryPage />} />
               <Route path="/order-confirm" element={<OrderConfirmPage />} />
               <Route path="/order-send" element={<OrderSendPage />} />

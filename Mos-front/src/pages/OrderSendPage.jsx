@@ -35,7 +35,7 @@ export default function OrderSendPage() {
 
     setIsSent(true)
     setTimeout(() => {
-      navigate('/menu/categories')
+      navigate('/menu')
     }, 2300)
   }
 
