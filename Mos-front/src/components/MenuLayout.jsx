@@ -1,11 +1,12 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CartContext } from '../CartContext'
 import '../menu.css'
 
 export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick }) {
   const { cartCount } = useContext(CartContext)
   const navigate = useNavigate()
+  const location = useLocation()
   const initialRemainingSeconds = 30
   const countdownStorageKey = 'mosRemainingUntil'
   const [remainingSeconds, setRemainingSeconds] = useState(initialRemainingSeconds)
@@ -46,21 +47,25 @@ export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick 
     }
   }
 
+  const showBackButton = location.pathname !== '/menu'
+
       // 滞在時間については本来はサーバーからの情報を元に計算するべきですが、DB実装までは固定値で表示しています
   return (
     <div className="menu-screen">
       <header className="menu-header">
-        <div className="menu-header-title">滞在時間</div>
+        {showBackButton && (
+          <button
+            type="button"
+            className="menu-header-back"
+            onClick={handleBack}
+          >
+            戻る
+          </button>
+        )}
 
         <div className="menu-header-content">
           <div className="remaining-time">
-            <button
-              type="button"
-              className="header-back-button"
-              onClick={handleBack}
-            >
-              戻る
-            </button>
+            <span>滞在時間</span>
             <strong>{remainingLabel}</strong>
           </div>
 

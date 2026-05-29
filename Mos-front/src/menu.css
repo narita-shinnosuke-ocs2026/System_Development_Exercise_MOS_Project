@@ -19,10 +19,25 @@
   box-sizing: border-box;
 }
 
-.menu-header-title {
+.menu-header-back {
   font-size: 14px;
-  color: #777;
+  color: #333;
   margin-bottom: 18px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 6px 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.menu-header-back:hover {
+  transform: translateY(-1px);
+}
+
+.menu-header-back:active {
+  transform: translateY(0);
+  opacity: 0.9;
 }
 
 .menu-header-content {
@@ -52,25 +67,6 @@
   font-weight: 400;
 }
 
-.header-back-button {
-  background: #f5f5f5;
-  color: #111;
-  border: 1px solid #666;
-  border-radius: 8px;
-  padding: 4px 10px;
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 1.2;
-}
-
-.header-back-button:hover {
-  transform: translateY(-1px);
-}
-
-.header-back-button:active {
-  transform: translateY(0);
-  opacity: 0.9;
-}
 
 .menu-header-buttons {
   display: flex;
