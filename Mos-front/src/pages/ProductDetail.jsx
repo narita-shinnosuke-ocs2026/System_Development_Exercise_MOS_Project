@@ -9,6 +9,9 @@ export default function ProductDetail() {
   const navigate = useNavigate()
   const { addToCart } = useContext(CartContext)
   const item = menuItems.find((m) => String(m.id) === String(id))
+  const selectedCourse = sessionStorage.getItem('selectedCourse') || ''
+  const isDrinkPlan = selectedCourse.startsWith('drink')
+  const isDrinkItem = item?.category === 'drink'
 
   const [qty, setQty] = useState(1)
   if (!item) return <div>商品が見つかりません。</div>
@@ -18,7 +21,8 @@ export default function ProductDetail() {
 
   const handleAdd = () => {
     for (let i = 0; i < qty; i++) {
-      addToCart({ id: item.id, name: item.name, price: item.price })
+      const price = isDrinkPlan && isDrinkItem ? 0 : item.price
+      addToCart({ id: item.id, name: item.name, price })
     }
     navigate('/menu')
   }
@@ -47,7 +51,9 @@ export default function ProductDetail() {
         <div className="product-detail-info">
           <div className="product-detail-row">
             <h2 className="product-detail-name">{item.name}</h2>
-            <p className="product-detail-price">¥{item.price}</p>
+            <p className="product-detail-price">
+              {isDrinkPlan && isDrinkItem ? '' : `¥${item.price}`}
+            </p>
           </div>
 
           <div className="qty-controls">

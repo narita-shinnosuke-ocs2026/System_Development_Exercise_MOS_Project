@@ -15,6 +15,8 @@ const categoryLabels = {
 export default function MenuPage() {
   const navigate = useNavigate()
   const { category } = useParams()
+  const selectedCourse = sessionStorage.getItem('selectedCourse') || ''
+  const isDrinkPlan = selectedCourse.startsWith('drink')
 
   const filtered = menuItems.filter((item) => item.category === category)
   const title = categoryLabels[category] || 'メニュー'
@@ -47,7 +49,9 @@ export default function MenuPage() {
 
               <div className="menu-card-body">
                 <p className="menu-item-name">{item.name}</p>
-                <p className="menu-item-price">{item.price}￥</p>
+                <p className="menu-item-price">
+                  {isDrinkPlan && item.category === 'drink' ? '' : `${item.price}￥`}
+                </p>
 
                 <button
                   type="button"

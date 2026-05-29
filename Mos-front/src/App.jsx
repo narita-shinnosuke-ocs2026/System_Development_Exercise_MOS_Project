@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
 import { CartProvider } from './CartContext'
 import Home from './pages/Home'
+import CourseSelectPage from './pages/CourseSelectPage'
 import MenuPage from './pages/MenuPage'
 import CategoryMenu from './pages/CategoryMenu'
 import HistoryPage from './pages/HistoryPage'
@@ -20,7 +21,8 @@ function App() {
         <div className="app-main">
           <main className="home-section">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<CourseSelectPage />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/about" element={<Navigate to="/menu" replace />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/menu" element={<CategoryMenu />} />
