@@ -7,9 +7,16 @@ export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick 
   const { cartCount } = useContext(CartContext)
   const navigate = useNavigate()
   const location = useLocation()
-  const initialRemainingSeconds = 30
+  const initialRemainingSeconds = 30 * 60
   const countdownStorageKey = 'mosRemainingUntil'
-  const [remainingSeconds, setRemainingSeconds] = useState(initialRemainingSeconds)
+  const [remainingSeconds, setRemainingSeconds] = useState(() => {
+    const storedUntil = Number(sessionStorage.getItem(countdownStorageKey))
+    const now = Date.now()
+    if (storedUntil && storedUntil > now) {
+      return Math.max(0, Math.ceil((storedUntil - now) / 1000))
+    }
+    return initialRemainingSeconds
+  })
 
   const remainingLabel = useMemo(() => {
     const minutes = Math.floor(remainingSeconds / 60)
