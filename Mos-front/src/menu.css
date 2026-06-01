@@ -178,17 +178,21 @@
 }
 
 .stay-expired-card {
-  width: min(320px, 84vw);
+  width: min(92vw, 520px);
+  min-height: min(70vh, 520px);
   background: #fff;
-  border-radius: 12px;
-  padding: 18px 16px;
+  border-radius: 16px;
+  padding: 26px 20px;
   text-align: center;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .stay-expired-card p {
-  margin: 0 0 14px;
-  font-size: 15px;
+  margin: 0;
+  font-size: 16px;
   color: #111;
 }
 
