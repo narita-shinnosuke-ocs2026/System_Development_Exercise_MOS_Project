@@ -22,15 +22,20 @@ const categories = [
 export default function CategoryMenu() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const navigate = useNavigate()
-  const { resetOrderHistory } = useContext(CartContext)
+  const { cartItems, resetCart } = useContext(CartContext)
 
   const handleCheckout = () => {
-    setIsConfirmOpen(true)
+    if (cartItems.length > 0) {
+      setIsConfirmOpen(true)
+      return
+    }
+
+    navigate('/checkout')
   }
 
   const handleConfirm = () => {
     setIsConfirmOpen(false)
-    resetOrderHistory()
+    resetCart()
     navigate('/checkout')
   }
 
@@ -59,9 +64,9 @@ export default function CategoryMenu() {
         <div className="modal-overlay">
           <div className="modal-card">
             <p>
-              お支払いを確定しますか?
+              注文保留に未確定の商品があります。
               <br />
-              確定後は追加注文することができません
+              注文をせずに会計しますか？
             </p>
             <div className="modal-actions">
               <button type="button" className="modal-button" onClick={handleConfirm}>

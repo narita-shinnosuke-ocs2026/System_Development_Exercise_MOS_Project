@@ -5,7 +5,7 @@ import { getRemainingSeconds, getStayUntil } from '../utils/stayTimer'
 import '../menu.css'
 
 export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick }) {
-  const { cartCount } = useContext(CartContext)
+  const { cartCount, resetCart, resetOrderHistory } = useContext(CartContext)
   const navigate = useNavigate()
   const location = useLocation()
   const [remainingSeconds, setRemainingSeconds] = useState(() => getRemainingSeconds())
@@ -50,6 +50,8 @@ export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick 
   const isExpiringSoon = remainingSeconds > 0 && remainingSeconds <= warningThresholdSeconds
 
   const handleExpiredCheckout = () => {
+    resetCart()
+    resetOrderHistory()
     navigate('/checkout')
   }
 
