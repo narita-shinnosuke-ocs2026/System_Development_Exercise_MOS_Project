@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CartContext } from '../CartContext'
-import { getRemainingSeconds, getStayUntil } from '../utils/stayTimer'
+import { getStayUntil, isNormalPlan } from '../utils/stayTimer'
 import '../App.css'
 import '../menu.css'
 
@@ -9,28 +9,31 @@ export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick 
   const { cartCount, resetCart, resetOrderHistory } = useContext(CartContext)
   const navigate = useNavigate()
   const location = useLocation()
-  const [remainingSeconds, setRemainingSeconds] = useState(() => getRemainingSeconds())
+  const unlimited = isNormalPlan()
+  const [remainingSeconds, setRemainingSeconds] = useState(Infinity)
 
   const remainingLabel = useMemo(() => {
+    if (unlimited || remainingSeconds === Infinity) return null
     if (remainingSeconds >= 60 * 60) {
-      const hours = Math.floor(remainingSeconds / 3600)
-      const minutes = Math.floor((remainingSeconds % 3600) / 60)
-      return `${hours}時間${String(minutes).padStart(2, '0')}分`
+      const h = Math.floor(remainingSeconds / 3600)
+      const m = Math.floor((remainingSeconds % 3600) / 60)
+      return `${h}時間${String(m).padStart(2, '0')}分`
     }
-    const minutes = Math.floor(remainingSeconds / 60)
-    const seconds = remainingSeconds % 60
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-  }, [remainingSeconds])
+    const m = Math.floor(remainingSeconds / 60)
+    const s = remainingSeconds % 60
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+  }, [remainingSeconds, unlimited])
 
   useEffect(() => {
-    const initialUntil = getStayUntil()
+    if (unlimited) return
+    const until = getStayUntil()
     const update = () => {
-      setRemainingSeconds(Math.max(0, Math.ceil((initialUntil - Date.now()) / 1000)))
+      setRemainingSeconds(Math.max(0, Math.ceil((until - Date.now()) / 1000)))
     }
     update()
     const id = setInterval(update, 1000)
     return () => clearInterval(id)
-  }, [])
+  }, [unlimited])
 
   const handleBack = () => {
     if (window.history.length > 1) navigate(-1)
@@ -44,8 +47,8 @@ export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick 
   }
 
   const showBackButton = location.pathname !== '/menu'
-  const isExpired = remainingSeconds <= 0
-  const isExpiringSoon = remainingSeconds > 0 && remainingSeconds <= 10 * 60
+  const isExpired = !unlimited && remainingSeconds <= 0
+  const isExpiringSoon = !unlimited && remainingSeconds > 0 && remainingSeconds <= 10 * 60
 
   return (
     <div className="menu-screen">
@@ -61,8 +64,14 @@ export function MenuLayout({ activeTab, children, showCheckout, onCheckoutClick 
 
         <div className="menu-header-content">
           <div className="remaining-time">
-            <span>滞在残り</span>
-            <strong>{remainingLabel}</strong>
+            {unlimited ? (
+              <span style={{ color: 'var(--gold)', fontSize: '0.72rem', letterSpacing: '0.06em' }}>通常プラン</span>
+            ) : (
+              <>
+                <span>滞在残り</span>
+                <strong>{remainingLabel}</strong>
+              </>
+            )}
           </div>
 
           <div className="menu-header-buttons">

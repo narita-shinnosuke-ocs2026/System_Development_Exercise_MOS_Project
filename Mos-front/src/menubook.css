@@ -1,0 +1,282 @@
+/* ============================================================
+   MIDORI-TEI — menubook.css
+   Menu book style with Art Deco decorations + swipe
+   ============================================================ */
+
+/* ── Book container ──────────────────────────────────────── */
+
+.menu-book {
+  background: #14213d;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  will-change: transform, opacity;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity  0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 480px;
+  user-select: none;
+}
+
+.menu-book.is-sliding-left {
+  transform: translateX(-6%);
+  opacity: 0.3;
+}
+
+.menu-book.is-sliding-right {
+  transform: translateX(6%);
+  opacity: 0.3;
+}
+
+/* ── Top/Bottom ornament ─────────────────────────────────── */
+
+.book-decor-top,
+.book-decor-bottom {
+  background: #14213d;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.book-decor-top {
+  border-bottom: 1px solid rgba(200, 160, 85, 0.25);
+}
+
+.book-decor-bottom {
+  border-top: 1px solid rgba(200, 160, 85, 0.25);
+  margin-top: 4px;
+}
+
+.book-sunburst {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Restaurant name ─────────────────────────────────────── */
+
+.book-restaurant-name {
+  text-align: center;
+  padding: 20px 16px 4px;
+  background: #14213d;
+}
+
+.book-name-en {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: rgba(200, 160, 85, 0.7);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.book-name-ja {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 600;
+  color: #e8d5a8;
+  letter-spacing: 0.22em;
+  margin: 0;
+}
+
+/* ── Category header ─────────────────────────────────────── */
+
+.book-category-header {
+  text-align: center;
+  padding: 16px 16px 12px;
+  background: #14213d;
+}
+
+.book-category-label {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #c8a055;
+  letter-spacing: 0.2em;
+  position: relative;
+  padding: 0 24px;
+}
+
+.book-category-label::before,
+.book-category-label::after {
+  content: '─';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(200, 160, 85, 0.4);
+  font-size: 0.8rem;
+}
+
+.book-category-label::before { right: 100%; }
+.book-category-label::after  { left:  100%; }
+
+/* ── Item list ───────────────────────────────────────────── */
+
+.book-item-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 20px 16px;
+  background: #14213d;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.book-item {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(200, 160, 85, 0.12);
+  cursor: pointer;
+  transition: background var(--transition);
+  border-radius: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.book-item:last-child {
+  border-bottom: none;
+}
+
+.book-item:hover:not(.is-sold-out) {
+  background: rgba(200, 160, 85, 0.06);
+}
+
+.book-item.is-sold-out {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.book-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.book-item-name {
+  font-family: var(--font-serif);
+  font-size: 0.97rem;
+  color: #e8d5b8;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+}
+
+.book-item-tag {
+  font-size: 0.65rem;
+  color: rgba(200, 160, 85, 0.7);
+  letter-spacing: 0.04em;
+}
+
+.book-item-tag.sold-out {
+  color: #ff9090;
+}
+
+/* Dotted leader line */
+.book-item-dots {
+  flex: 1;
+  min-width: 16px;
+  border-bottom: 1px dotted rgba(200, 160, 85, 0.3);
+  margin-bottom: 3px;
+}
+
+.book-item-price {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: #c8a055;
+  font-weight: 500;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+/* ── Page navigation ─────────────────────────────────────── */
+
+.book-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 0 4px;
+}
+
+.book-nav-arrow {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  color: #c8a055;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+.book-nav-arrow:hover:not(:disabled) {
+  background: var(--border-gold);
+  box-shadow: 0 2px 8px rgba(200, 160, 85, 0.3);
+}
+
+.book-nav-arrow:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.book-nav-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.book-nav-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--transition);
+}
+
+.book-nav-dot.is-active {
+  background: #c8a055;
+  transform: scale(1.3);
+}
+
+.book-nav-dot:hover:not(.is-active) {
+  background: var(--muted);
+}
+
+/* ── Swipe hint ──────────────────────────────────────────── */
+
+.book-swipe-hint {
+  text-align: center;
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  margin: 4px 0 0;
+  opacity: 0.7;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (min-width: 600px) {
+  .book-item-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+    padding: 4px 28px 20px;
+  }
+
+  .book-item:nth-child(even) {
+    border-left: 1px solid rgba(200, 160, 85, 0.1);
+    padding-left: 16px;
+  }
+}
