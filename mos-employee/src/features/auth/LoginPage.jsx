@@ -14,18 +14,29 @@ function LoginPage() {
   const [id, setId] = useState('')
   const [pw, setPw] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // 入力欄が両方埋まっている時だけログインボタンを有効にする
   const canSubmit = useMemo(() => id.trim() && pw.trim(), [id, pw])
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
     setError('')
+    setLoading(true)
 
-    const result = authenticate(id.trim(), pw)
-    if (!result.ok) {
-      setError(result.reason)
-      return
+    try {
+      const result = await authenticate(id.trim(), pw)
+      if (!result.ok) {
+        setError(result.reason)
+        return
+      }
+      setUser(result.user)
+      clearUseCase()
+      navigate('/employee', { replace: true })
+    } catch {
+      setError('サーバーに接続できません')
+    } finally {
+      setLoading(false)
     }
 
     // ログイン成功時はユーザー情報を保存し、用途選択は初期化する

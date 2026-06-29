@@ -10,9 +10,9 @@ import './Orders.css'
 
 import {
   loadOrders,
-  saveOrders,
   searchOrders,
 } from '../../domain/orders/orderDb'
+import { orderApi } from '../../services/api.js'
 
 const PER_PAGE = 8
 
@@ -33,6 +33,18 @@ function Orders() {
   const [statusFilter, setStatusFilter] = useState('all')
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(true)
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      const data = await loadOrders()
+      setOrders(data)
+    } catch (e) {
+      console.error('注文取得エラー:', e)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   // =========================
   // effect
@@ -40,8 +52,10 @@ function Orders() {
 
   // 一覧が変わったら保存する
   useEffect(() => {
-    saveOrders(orders)
-  }, [orders])
+    fetchOrders()
+    const timer = setInterval(fetchOrders, 30_000)
+    return () => clearInterval(timer)
+  }, [fetchOrders])
 
   // =========================
   // 一覧の加工
@@ -98,14 +112,15 @@ function Orders() {
         const nextItems = o.items.map((item, idx) =>
           idx === itemIndex ? { ...item, cooked: !item.cooked } : item
         )
-
         const allCooked = nextItems.length > 0 && nextItems.every((item) => item.cooked)
 
-        return {
-          ...o,
-          items: nextItems,
-          status: allCooked ? '提供待ち' : '調理中',
+        if (allCooked) {
+          orderApi.markReady(o._numId)
+            .then((updated) => setOrders((prev2) => prev2.map((x) => (x.id === o.id ? updated : x))))
+            .catch((e) => console.error('提供待ち更新エラー:', e))
         }
+
+        return { ...o, items: nextItems, status: allCooked ? '提供待ち' : '調理中' }
       })
     )
   }
@@ -133,11 +148,14 @@ function Orders() {
           <div className="ordersMeta">表示 {visibleCount} 件 / 全 {totalCount} 件</div>
         </div>
 
-        {urgentCount > 0 && (
-          <div className="urgentCount">
-            未確認 <strong>{urgentCount}</strong> 件
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {urgentCount > 0 && (
+            <div className="urgentCount">
+              未確認 <strong>{urgentCount}</strong> 件
+            </div>
+          )}
+          <button type="button" className="filterBtn" onClick={fetchOrders}>更新</button>
+        </div>
       </header>
 
       <div className="ordersTools">
@@ -204,7 +222,7 @@ function Orders() {
 
             <div className="orderActions">
               {o.status === '未確認' && (
-                <button className="primaryBtn2" type="button" onClick={() => startCooking(o.id)}>
+                <button className="primaryBtn2" type="button" onClick={() => startCooking(o)}>
                   確認
                 </button>
               )}
@@ -216,7 +234,7 @@ function Orders() {
               )}
 
               {o.status === '提供待ち' && (
-                <button className="primaryBtn2" type="button" onClick={() => completeServing(o.id)}>
+                <button className="primaryBtn2" type="button" onClick={() => completeServing(o)}>
                   提供完了
                 </button>
               )}

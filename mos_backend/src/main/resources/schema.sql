@@ -19,9 +19,12 @@ CREATE TABLE IF NOT EXISTS menu_items (
     category_id         BIGINT       NOT NULL,
     name                VARCHAR(200) NOT NULL,
     price               INT          NOT NULL DEFAULT 0,
+    stock               INT,
+    active              BOOLEAN      NOT NULL DEFAULT TRUE,
     is_sold_out         BOOLEAN      NOT NULL DEFAULT FALSE,
     drink_plan_excluded BOOLEAN      NOT NULL DEFAULT FALSE,
     image_url           VARCHAR(500),
+    tags                VARCHAR(500) NOT NULL DEFAULT '',
     sort_order          INT          NOT NULL DEFAULT 0,
     created_at          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -94,4 +97,26 @@ CREATE TABLE IF NOT EXISTS SPRING_SESSION_ATTRIBUTES (
     CONSTRAINT PK_SPRING_SESSION_ATTR PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
     CONSTRAINT FK_SPRING_SESSION_ATTR FOREIGN KEY (SESSION_PRIMARY_ID)
         REFERENCES SPRING_SESSION (PRIMARY_ID) ON DELETE CASCADE
+);
+
+-- menu_items カラム追加マイグレーション (既存テーブル対応)
+ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS active              BOOLEAN      NOT NULL DEFAULT TRUE;
+ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS stock               INT;
+ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS is_sold_out         BOOLEAN      NOT NULL DEFAULT FALSE;
+ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS drink_plan_excluded BOOLEAN      NOT NULL DEFAULT FALSE;
+ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS image_url           VARCHAR(500);
+ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS tags                VARCHAR(500) NOT NULL DEFAULT '';
+ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS sort_order          INT          NOT NULL DEFAULT 0;
+ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS updated_at          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+-- 従業員
+CREATE TABLE IF NOT EXISTS staff (
+    id                 VARCHAR(20)  NOT NULL PRIMARY KEY,
+    name               VARCHAR(100) NOT NULL,
+    role               VARCHAR(20)  NOT NULL DEFAULT 'employee',
+    active             BOOLEAN      NOT NULL DEFAULT TRUE,
+    password           VARCHAR(100) NOT NULL,
+    allowed_use_cases  VARCHAR(200) NOT NULL DEFAULT 'hall,kitchen',
+    created_at         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

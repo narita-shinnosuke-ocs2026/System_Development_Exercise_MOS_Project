@@ -114,3 +114,4 @@ export function searchOrders(list, query, statusFilter = 'all') {
     return hitTable || hitItems
   })
 }
+

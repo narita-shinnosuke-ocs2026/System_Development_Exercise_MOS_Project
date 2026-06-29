@@ -43,6 +43,7 @@ function normalizeSeat(seat, index, floor) {
     status: seat?.status || SEAT_STATUS.empty,
     people: Number.isFinite(Number(seat?.people)) ? Math.max(0, Number(seat.people)) : 0,
   }
+  return store
 }
 
 function buildDefaultStore() {
@@ -93,12 +94,9 @@ export function getSeatsByFloor(store, floor) {
 
 // 特定フロアの 1 席だけ更新した新しい store を返す
 export function updateSeatInStore(store, floor, nextSeat) {
-  const current = getSeatsByFloor(store, floor)
-  return {
-    ...store,
-    floors: {
-      ...store.floors,
-      [floor]: current.map((seat) => (seat.id === nextSeat.id ? nextSeat : seat)),
-    },
-  }
+  const floors = { ...store.floors }
+  floors[floor] = (floors[floor] || []).map((s) =>
+    s.id === nextSeat.id ? nextSeat : s
+  )
+  return { ...store, floors }
 }

@@ -15,15 +15,14 @@ import './MenuManagement.css'
 
 import {
   loadMenus,
-  saveMenus,
-  makeNextMenuId,
   isSoldOut,
   searchMenus,
 } from '../../domain/menu/menuDb'
+import { menuApi } from '../../services/api.js'
 import {
   loadTags,
-  addTag,
-  removeTag,
+  addTagLocally,
+  removeTagLocally,
 } from '../../domain/menu/tagDb'
 
 const yen = (n) => `¥${Number(n || 0).toLocaleString('ja-JP')}`
@@ -37,12 +36,13 @@ export default function MenuManagement({ onBack }) {
   const [menus, setMenus] = useState(() => loadMenus())
   const [tags, setTags] = useState(() => loadTags())
   const [query, setQuery] = useState('')
+  const [loading, setLoading] = useState(true)
 
   // 商品追加 / 編集
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState('add')
   const [form, setForm] = useState({
-    id: '',
+    id: null,
     name: '',
     price: 0,
     useStock: false,
@@ -64,8 +64,14 @@ export default function MenuManagement({ onBack }) {
   // =========================
 
   useEffect(() => {
-    saveMenus(menus)
-  }, [menus])
+    Promise.all([loadMenus(), loadTags()])
+      .then(([m, t]) => {
+        setMenus(m)
+        setTags(t)
+      })
+      .catch((e) => console.error('メニュー取得エラー:', e))
+      .finally(() => setLoading(false))
+  }, [])
 
   // =========================
   // 一覧加工
@@ -97,7 +103,7 @@ export default function MenuManagement({ onBack }) {
   const openAdd = () => {
     setMode('add')
     setForm({
-      id: makeNextMenuId(menus),
+      id: null,
       name: '',
       price: 0,
       useStock: false,
@@ -181,7 +187,6 @@ export default function MenuManagement({ onBack }) {
     }
 
     const payload = {
-      id: form.id,
       name,
       price,
       stock: stockValue,
@@ -189,13 +194,18 @@ export default function MenuManagement({ onBack }) {
       tags: form.tags,
     }
 
-    if (mode === 'add') {
-      setMenus((prev) => [payload, ...prev])
-    } else {
-      setMenus((prev) => prev.map((m) => (m.id === payload.id ? payload : m)))
+    try {
+      if (mode === 'add') {
+        const created = await menuApi.create(payload)
+        setMenus((prev) => [created, ...prev])
+      } else {
+        const updated = await menuApi.update(form.id, { ...payload })
+        setMenus((prev) => prev.map((m) => (m.id === updated.id ? updated : m)))
+      }
+      closeModal()
+    } catch {
+      setError('保存に失敗しました')
     }
-
-    closeModal()
   }
 
   // =========================
@@ -206,13 +216,23 @@ export default function MenuManagement({ onBack }) {
     setMenus((prev) => prev.map((x) => (x.id === menu.id ? { ...x, active: false } : x)))
   }
 
-  const enableMenu = (menu) => {
-    setMenus((prev) => prev.map((x) => (x.id === menu.id ? { ...x, active: true } : x)))
+  const enableMenu = async (menu) => {
+    try {
+      const updated = await menuApi.update(menu.id, { ...menu, active: true })
+      setMenus((prev) => prev.map((x) => (x.id === menu.id ? updated : x)))
+    } catch (e) {
+      console.error('有効化エラー:', e)
+    }
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteTarget) return
-    setMenus((prev) => prev.filter((m) => m.id !== deleteTarget.id))
+    try {
+      await menuApi.delete(deleteTarget.id)
+      setMenus((prev) => prev.filter((m) => m.id !== deleteTarget.id))
+    } catch (e) {
+      console.error('削除エラー:', e)
+    }
     setDeleteTarget(null)
   }
 
@@ -221,7 +241,7 @@ export default function MenuManagement({ onBack }) {
   // =========================
 
   const handleAddTag = () => {
-    const result = addTag(tagInput)
+    const result = addTagLocally(tags, tagInput)
     if (!result.ok) {
       setTagError(result.reason)
       return
@@ -416,7 +436,7 @@ export default function MenuManagement({ onBack }) {
 
               <label className="label">
                 商品ID
-                <input className="input" value={form.id} disabled />
+                <input className="input" value={form.id ?? '(自動採番)'} disabled />
               </label>
 
               <label className="label">

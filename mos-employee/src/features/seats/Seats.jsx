@@ -14,7 +14,6 @@ import './Seats.css'
 
 import {
   loadSeatStore,
-  saveSeatStore,
   getSeatsByFloor,
   updateSeatInStore,
   SEAT_STATUS,
@@ -22,6 +21,7 @@ import {
   SEAT_STATUS_LABEL,
   SEAT_STATUS_COLOR,
 } from '../../domain/seats/seatDb'
+import { seatApi } from '../../services/api.js'
 
 const FILTERS = [
   { key: 'all', label: '全件' },
@@ -39,6 +39,7 @@ function Seats() {
   const [seatStore, setSeatStore] = useState(() => loadSeatStore())
   const [floor, setFloor] = useState(null)
   const [statusFilter, setStatusFilter] = useState('all')
+  const [loading, setLoading] = useState(true)
 
   const [confirm, setConfirm] = useState(null)
   const [draft, setDraft] = useState(null)
@@ -51,8 +52,11 @@ function Seats() {
 
   // ストアが変わったら保存する
   useEffect(() => {
-    saveSeatStore(seatStore)
-  }, [seatStore])
+    loadSeatStore()
+      .then(setSeatStore)
+      .catch((e) => console.error('座席取得エラー:', e))
+      .finally(() => setLoading(false))
+  }, [])
 
   // ESC でモーダル類を閉じる
   useEffect(() => {
@@ -95,7 +99,15 @@ function Seats() {
 
   const updateSeat = (nextSeat) => {
     if (!floor) return
+    // ローカル状態を楽観的に更新
     setSeatStore((prev) => updateSeatInStore(prev, floor, nextSeat))
+    // バックエンドを同期
+    try {
+      const saved = await seatApi.updateStatus(nextSeat._numId, nextSeat.status, nextSeat.people)
+      setSeatStore((prev) => updateSeatInStore(prev, floor, saved))
+    } catch (e) {
+      console.error('座席更新エラー:', e)
+    }
   }
 
   // =========================

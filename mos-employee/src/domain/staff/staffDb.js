@@ -9,34 +9,29 @@ const STAFF_KEY = 'staffList_v3'
 const SEQ_S_KEY = 'staffSeq_S_v2'
 const SEQ_A_KEY = 'staffSeq_A_v2'
 
-const pad6 = (n) => String(n).padStart(6, '0')
+export async function loadStaff() {
+  return staffApi.getAll()
+}
 
-const defaultStaff = [
-  {
-    id: 'S000001',
-    name: '店長 太郎',
-    role: 'manager',
-    active: true,
-    password: '1111',
-    allowedUseCases: ['hall', 'kitchen', 'admin'],
-  },
-  {
-    id: 'S000002',
-    name: '社員 花子',
-    role: 'employee',
-    active: true,
-    password: '2222',
-    allowedUseCases: ['hall', 'kitchen', 'admin'],
-  },
-  {
-    id: 'A000001',
-    name: 'アルバイト 次郎',
-    role: 'partTime',
-    active: true,
-    password: '3333',
-    allowedUseCases: ['hall', 'kitchen'],
-  },
-]
+export function generateIdByRole(role, staffList = []) {
+  const list = staffList || []
+  if (role === 'partTime') {
+    const nums = list
+      .map((x) => x.id)
+      .filter((id) => /^A\d{6}$/i.test(String(id)))
+      .map((id) => Number(String(id).slice(1)))
+      .filter(Number.isFinite)
+    const max = nums.length ? Math.max(...nums) : 0
+    return `A${String(max + 1).padStart(6, '0')}`
+  }
+  const nums = list
+    .map((x) => x.id)
+    .filter((id) => /^S\d{6}$/i.test(String(id)))
+    .map((id) => Number(String(id).slice(1)))
+    .filter(Number.isFinite)
+  const max = nums.length ? Math.max(...nums) : 0
+  return `S${String(max + 1).padStart(6, '0')}`
+}
 
 // role からデフォルトの用途を返す
 export function getDefaultUseCasesFromRole(role) {

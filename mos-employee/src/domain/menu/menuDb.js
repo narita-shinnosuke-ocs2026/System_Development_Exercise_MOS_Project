@@ -105,3 +105,4 @@ export function searchMenus(list, query) {
     (m.tags || []).some((t) => String(t).toLowerCase().includes(q))
   ))
 }
+

@@ -36,22 +36,15 @@ export function saveTags(tags) {
 // 戻り値を { ok, reason, tags } 形式にして、UI 側でエラーハンドリングしやすくしている
 export function addTag(name) {
   const value = String(name || '').trim()
-  const tags = loadTags()
-
   if (!value) return { ok: false, reason: 'タグ名を入力してください' }
 
   // 大文字小文字を無視して重複判定する
   if (tags.some((t) => String(t).toLowerCase() === value.toLowerCase())) {
     return { ok: false, reason: '同じタグがすでにあります' }
   }
-
-  const next = [...tags, value]
-  saveTags(next)
-  return { ok: true, tags: next }
+  return { ok: true, tags: [...tags, value] }
 }
 
-// タグ削除
-// ※ 商品側のタグ参照解除は feature 側で同時に行う
 export function removeTag(name) {
   const tags = loadTags().filter((t) => t !== name)
   saveTags(tags)

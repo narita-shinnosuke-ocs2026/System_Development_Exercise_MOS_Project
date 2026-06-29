@@ -3,7 +3,7 @@
 -- ============================================================
 
 -- カテゴリ
-INSERT INTO categories (id, name, display_name, sort_order) VALUES
+INSERT IGNORE INTO categories (id, name, display_name, sort_order) VALUES
     (1, 'free',     '無料備品',   1),
     (2, 'yakitori', '焼き鳥',     2),
     (3, 'rice',     'ごはんもの', 3),
@@ -13,7 +13,7 @@ INSERT INTO categories (id, name, display_name, sort_order) VALUES
 
 -- メニュー商品
 -- 無料備品 (category_id=1)
-INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
+INSERT IGNORE INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
     (1,  1, 'おしぼり', 0, FALSE, FALSE, 1),
     (2,  1, '小皿',     0, FALSE, FALSE, 2),
     (3,  1, 'グラス',   0, FALSE, FALSE, 3),
@@ -21,7 +21,7 @@ INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_ex
     (5,  1, 'お冷',     0, TRUE,  FALSE, 5);
 
 -- 焼き鳥 (category_id=2)
-INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
+INSERT IGNORE INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
     (9,  2, 'ねぎま',   180, FALSE, FALSE, 1),
     (10, 2, 'もも',     180, FALSE, FALSE, 2),
     (11, 2, 'かわ',     160, FALSE, FALSE, 3),
@@ -29,7 +29,7 @@ INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_ex
     (13, 2, 'ぼんじり', 190, FALSE, FALSE, 5);
 
 -- ごはんもの (category_id=3)
-INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
+INSERT IGNORE INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
     (14, 3, '焼きおにぎり', 260, FALSE, FALSE, 1),
     (15, 3, '鶏雑炊',       420, FALSE, FALSE, 2),
     (16, 3, '鶏そぼろ丼',   480, FALSE, FALSE, 3),
@@ -37,7 +37,7 @@ INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_ex
     (18, 3, '明太ごはん',   380, FALSE, FALSE, 5);
 
 -- スピード (category_id=4)
-INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
+INSERT IGNORE INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
     (19, 4, '枝豆',           280, FALSE, FALSE, 1),
     (20, 4, '冷奴',           260, FALSE, FALSE, 2),
     (21, 4, '漬けキュウリ',   300, FALSE, FALSE, 3),
@@ -45,7 +45,7 @@ INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_ex
     (23, 4, 'もやしのナムル', 280, FALSE, FALSE, 5);
 
 -- ドリンク (category_id=5)
-INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
+INSERT IGNORE INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
     (24, 5, '生ビール（中）', 520, FALSE, TRUE,  1),
     (25, 5, 'ハイボール',     480, FALSE, FALSE, 2),
     (26, 5, 'レモンサワー',   480, FALSE, FALSE, 3),
@@ -53,7 +53,7 @@ INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_ex
     (28, 5, 'コーラ',         300, FALSE, FALSE, 5);
 
 -- デザート (category_id=6)
-INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
+INSERT IGNORE INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_excluded, sort_order) VALUES
     (29, 6, 'バニラアイス',       320, FALSE, FALSE, 1),
     (30, 6, '抹茶アイス',         320, FALSE, FALSE, 2),
     (31, 6, '黒蜜きなこアイス',   380, FALSE, FALSE, 3),
@@ -61,7 +61,7 @@ INSERT INTO menu_items (id, category_id, name, price, is_sold_out, drink_plan_ex
     (33, 6, '杏仁豆腐',           360, FALSE, FALSE, 5);
 
 -- 座席
-INSERT INTO seats (id, seat_number, floor, status, qr_code) VALUES
+INSERT IGNORE INTO seats (id, seat_number, floor, status, qr_code) VALUES
     (1,  'A1', 1, 'EMPTY', 'QR-A1'),
     (2,  'A2', 1, 'EMPTY', 'QR-A2'),
     (3,  'A3', 1, 'EMPTY', 'QR-A3'),
@@ -74,3 +74,9 @@ INSERT INTO seats (id, seat_number, floor, status, qr_code) VALUES
     (10, 'C2', 2, 'EMPTY', 'QR-C2'),
     (11, 'C3', 2, 'EMPTY', 'QR-C3'),
     (12, 'C4', 2, 'EMPTY', 'QR-C4');
+
+-- 従業員
+INSERT IGNORE INTO staff (id, name, role, active, password, allowed_use_cases) VALUES
+    ('S000001', '店長 太郎',     'manager',  TRUE, '1111', 'hall,kitchen,admin'),
+    ('S000002', '社員 花子',     'employee', TRUE, '2222', 'hall,kitchen,admin'),
+    ('A000001', 'アルバイト 次郎', 'partTime', TRUE, '3333', 'hall,kitchen');
